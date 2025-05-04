@@ -21,9 +21,9 @@ const spaceGrotesk = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "DevFlow",
+  title: "PostalZone",
   description:
-    "A community-driven platform for asking and answering programming questions. Get help, share knowledge, and collaborate with developers from around the world. Explore topics in web development, mobile app development, algorithms, data structures, and more.",
+    "A one stop solutions for minor civil/electrical works issues faced in departmental building.",
   icons: {
     icon: "/images/site-logo.svg",
   },

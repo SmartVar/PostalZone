@@ -14,9 +14,9 @@ import { EMPTY_QUESTION } from "@/constants/states";
 import { getQuestions } from "@/lib/actions/question.action";
 
 export const metadata: Metadata = {
-  title: "Dev Overflow | Home",
+  title: "Postal Zone | Home",
   description:
-    "Discover different programming questions and answers with recommendations from the community.",
+    "Raise a tickets if having issues of civil and electrical repairs in postal buildings of Navi Mumbai Region.",
 };
 
 async function Home({ searchParams }: RouteParams) {
@@ -34,13 +34,13 @@ async function Home({ searchParams }: RouteParams) {
   return (
     <>
       <section className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
-        <h1 className="h1-bold text-dark100_light900">All Questions</h1>
+        <h1 className="h1-bold text-dark100_light900">All Tickets</h1>
         <Button
           className="primary-gradient min-h-[46px] px-4 py-3 !text-light-900"
           asChild
         >
           <Link href={ROUTES.ASK_QUESTION} className="max-sm:w-full">
-            Ask a Question
+            Create Ticket
           </Link>
         </Button>
       </section>
@@ -49,7 +49,7 @@ async function Home({ searchParams }: RouteParams) {
         <LocalSearch
           route={ROUTES.HOME}
           imgSrc="/icons/search.svg"
-          placeholder="Search questions..."
+          placeholder="Search tickets..."
           iconPosition="left"
           otherClasses="flex-1"
         />

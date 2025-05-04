@@ -19,11 +19,11 @@ const Navbar = async () => {
           src="/images/site-logo.svg"
           width={23}
           height={23}
-          alt="Dev Overflow Logo"
+          alt="Postal Zone Logo"
         />
 
         <p className="h2-bold font-space-grotesk text-dark-100 dark:text-light-900 max-sm:hidden">
-          Dev<span className="text-primary-500">Overflow</span>
+          Postal<span className="text-primary-500">Zone</span>
         </p>
       </Link>
 

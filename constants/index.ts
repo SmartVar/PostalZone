@@ -4,7 +4,8 @@ export const themes = [
   { value: "system", label: "System", icon: "/icons/computer.svg" },
 ];
 
-export const sidebarLinks = [
+// eslint-disable-next-line camelcase
+export const sidebarLinks_bk = [
   {
     imgURL: "/icons/home.svg",
     route: "/",
@@ -69,3 +70,26 @@ export const BADGE_CRITERIA = {
     GOLD: 100000,
   },
 };
+
+export const sidebarLinks = [
+  {
+    imgURL: "/icons/home.svg",
+    route: "/",
+    label: "Tickets",
+  },
+  {
+    imgURL: "/icons/tag.svg",
+    route: "/tags",
+    label: "Tags",
+  },
+  {
+    imgURL: "/icons/user.svg",
+    route: "/profile",
+    label: "Profile",
+  },
+  {
+    imgURL: "/icons/suitcase.svg",
+    route: "/dashboard",
+    label: "Dashbaord",
+  },
+];
