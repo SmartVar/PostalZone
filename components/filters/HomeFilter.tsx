@@ -8,11 +8,16 @@ import { cn } from "@/lib/utils";
 
 import { Button } from "../ui/button";
 
+// const filters = [
+//   { name: "Newest", value: "newest" },
+//   { name: "Popular", value: "popular" },
+//   { name: "Unanswered", value: "unanswered" },
+//   { name: "Recommeded", value: "recommended" },
+// ];
 const filters = [
-  { name: "Newest", value: "newest" },
-  { name: "Popular", value: "popular" },
-  { name: "Unanswered", value: "unanswered" },
-  { name: "Recommeded", value: "recommended" },
+  { name: "Open", value: "open" },
+  { name: "Inprogress", value: "inprogress" },
+  { name: "Closed", value: "closed" },
 ];
 
 const HomeFilter = () => {

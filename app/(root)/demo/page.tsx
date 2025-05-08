@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import TicketCard from "@/components/cards/TicketCard";
+
+import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
 import CommonFilter from "@/components/filters/CommonFilter";
 import HomeFilter from "@/components/filters/HomeFilter";
@@ -9,8 +10,8 @@ import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import { HomePageFilters } from "@/constants/filters";
 import ROUTES from "@/constants/routes";
-import { EMPTY_TICKET } from "@/constants/states";
-import { getTickets } from "@/lib/actions/ticket.action";
+import { EMPTY_QUESTION } from "@/constants/states";
+import { getQuestions } from "@/lib/actions/question.action";
 
 export const metadata: Metadata = {
   title: "Postal Zone | Home",
@@ -21,14 +22,14 @@ export const metadata: Metadata = {
 async function Home({ searchParams }: RouteParams) {
   const { page, pageSize, query, filter } = await searchParams;
 
-  const { success, data, error } = await getTickets({
+  const { success, data, error } = await getQuestions({
     page: Number(page) || 1,
     pageSize: Number(pageSize) || 10,
     query,
     filter,
   });
 
-  const { tickets, isNext } = data || {};
+  const { questions, isNext } = data || {};
 
   return (
     <>
@@ -38,7 +39,7 @@ async function Home({ searchParams }: RouteParams) {
           className="primary-gradient min-h-[46px] px-4 py-3 !text-light-900"
           asChild
         >
-          <Link href={ROUTES.CREATE_TICKET} className="max-sm:w-full">
+          <Link href={ROUTES.ASK_QUESTION} className="max-sm:w-full">
             Create Ticket
           </Link>
         </Button>
@@ -65,12 +66,12 @@ async function Home({ searchParams }: RouteParams) {
       <DataRenderer
         success={success}
         error={error}
-        data={tickets}
-        empty={EMPTY_TICKET}
-        render={(tickets) => (
+        data={questions}
+        empty={EMPTY_QUESTION}
+        render={(questions) => (
           <div className="mt-10 flex w-full flex-col gap-6">
-            {tickets.map((ticket) => (
-              <TicketCard key={ticket._id} ticket={ticket} />
+            {questions.map((question) => (
+              <QuestionCard key={question._id} question={question} />
             ))}
           </div>
         )}

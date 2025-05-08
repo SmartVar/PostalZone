@@ -10,8 +10,10 @@ interface Props {
 const ProfileLink = ({ imgUrl, href, title }: Props) => {
   return (
     <div className="flex-center gap-1">
-      <Image src={imgUrl} alt={title} width={20} height={20} />
-
+      |
+      {imgUrl ? (
+        <Image src={imgUrl} alt={title} width={20} height={20} />
+      ) : null}
       {href ? (
         <Link
           href={href}

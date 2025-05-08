@@ -34,6 +34,23 @@ interface GetTagQuestionsParams extends Omit<PaginatedSearchParams, "filter"> {
   tagId: string;
 }
 
+interface CreateTicketParams {
+  division: string;
+  po: string;
+  tkttitle: string;
+  tktdescription: string;
+  tktstatus: string;
+  tktpriority: string;
+}
+
+interface EditTicketParams extends CreateTicketParams {
+  ticketId: string;
+}
+
+interface GetTicketParams {
+  ticketId: string;
+}
+
 interface IncrementViewsParams {
   questionId: string;
 }
@@ -89,6 +106,10 @@ interface DeleteQuestionParams {
   questionId: string;
 }
 
+interface DeleteTicketParams {
+  ticketId: string;
+}
+
 interface DeleteAnswerParams {
   answerId: string;
 }
@@ -105,7 +126,7 @@ interface CreateInteractionParams {
     | "search";
   actionId: string;
   authorId: string;
-  actionTarget: "question" | "answer";
+  actionTarget: "question" | "answer" | "ticket";
 }
 
 interface UpdateReputationParams {

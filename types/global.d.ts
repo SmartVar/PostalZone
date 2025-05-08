@@ -50,6 +50,18 @@ interface Question {
   views: number;
 }
 
+interface Ticket {
+  _id: string;
+  division: string;
+  po: string;
+  tkttitle: string;
+  tktdescription: string;
+  tktstatus: string;
+  tktpriority: string;
+  author: Author;
+  createdAt: Date;
+}
+
 interface Answer {
   _id: string;
   author: Author;

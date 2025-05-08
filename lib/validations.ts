@@ -69,6 +69,36 @@ export const AskQuestionSchema = z.object({
     .max(3, { message: "Maximum of 3 tags." }),
 });
 
+export const CreateTicketSchema = z.object({
+  division: z
+    .string()
+    .min(3, {
+      message: "Division name must be at least 3 characters i.e. NMD/THN.",
+    })
+    .max(3, {
+      message: "Division name must be at least 3 characters i.e. NMD/THN.",
+    }),
+  po: z
+    .string()
+    .min(3, {
+      message: "Post Office name must be at least 3 characters.",
+    })
+    .max(20, { message: "Post Office Name must be less than 20 charachter." }),
+  tkttitle: z
+    .string()
+    .min(3, {
+      message: "Ticket title must be at least 3 characters.",
+    })
+    .max(50, { message: "Ticket title must be less than 50 characters." }),
+  tktdescription: z.string().min(20, { message: "Minimum of 20 characters." }),
+  tktstatus: z.string().min(4, {
+    message: "Status should be Open/Closed/Progress",
+  }),
+  tktpriority: z.string().min(3, {
+    message: "Priority should be top/medium/low",
+  }),
+});
+
 export const UserSchema = z.object({
   name: z.string().min(1, "Name is required"),
   username: z.string().min(3, "Username must be at least 3 characters"),
@@ -120,6 +150,14 @@ export const EditQuestionSchema = AskQuestionSchema.extend({
 
 export const GetQuestionSchema = z.object({
   questionId: z.string().min(1, "Question ID is required"),
+});
+
+export const EditTicketSchema = CreateTicketSchema.extend({
+  ticketId: z.string().min(1, "Ticket ID is required"),
+});
+
+export const GetTicketSchema = z.object({
+  ticketId: z.string().min(1, "Ticket ID is required"),
 });
 
 export const PaginatedSearchParamsSchema = z.object({
@@ -210,6 +248,10 @@ export const GetUserTagsSchema = z.object({
 
 export const DeleteQuestionSchema = z.object({
   questionId: z.string().min(1, "Question ID is required"),
+});
+
+export const DeleteTicketSchema = z.object({
+  ticketId: z.string().min(1, "Ticket ID is required"),
 });
 
 export const DeleteAnswerSchema = z.object({

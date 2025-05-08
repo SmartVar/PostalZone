@@ -29,6 +29,15 @@ export const EMPTY_QUESTION = {
   },
 };
 
+export const EMPTY_TICKET = {
+  title: "Ahh, No Ticket Yet!",
+  message: "Currently No Tickets are available for display.",
+  button: {
+    text: "Create Ticket",
+    href: ROUTES.CREATE_TICKET,
+  },
+};
+
 export const EMPTY_TAGS = {
   title: "No Tags Found",
   message: "The tag cloud is empty. Add some keywords to make it rain.",
