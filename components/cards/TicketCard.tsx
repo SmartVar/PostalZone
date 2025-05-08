@@ -30,27 +30,26 @@ const TicketCard = ({
 }: Props) => {
   return (
     <div className="card-wrapper rounded-[10px] p-9 sm:px-11">
-      <div className="flex flex-col-reverse items-center justify-between gap-5 sm:flex-row">
+      <div className="flex flex-col-reverse items-left justify-between gap-5 sm:flex-row">
         <div className="flex-1">
           <span className="subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden">
             {getTimeStamp(createdAt)}
           </span>
 
           <Link href={ROUTES.TICKET(_id)}>
-            <Badge className="subtle-medium background-light800_dark300 text-light400_light500 flex flex-row gap-2 rounded-md border-none px-4 py-2 uppercase">
-              {/* <div className="flex-center space-x-2"> */}
-              <span>{po}</span>
-              {/* </div> */}
-            </Badge>
-            <h3 className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-[56px] border">
-              {po}
-            </h3>
             <h3 className="sm:h3-semibold base-semibold text-dark200_light900 line-clamp-1 flex-1">
               {tkttitle}
             </h3>
-            <h3 className="sm:paragraph-semibold base-semibold text-dark200_light900 line-clamp-1 flex-1">
+
+            <Badge className="subtle-medium background-light800_dark300 text-light400_light500 flex flex-row gap-2 rounded-md border-none px-4 py-2 uppercase">
+              <div className="flex-between flex-wrap">
+                <span>{po}</span>
+              </div>
+            </Badge>
+
+            {/* <h6 className="sm:paragraph-semibold base-semibold text-dark200_light900 line-clamp-1 flex-1">
               {tktdescription}
-            </h3>
+            </h6> */}
           </Link>
         </div>
 
