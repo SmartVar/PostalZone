@@ -7,6 +7,7 @@ import { getTimeStamp } from "@/lib/utils";
 // import TagCard from "./TagCard";
 import Metric from "../Metric";
 import EditDeleteAction from "../user/EditDeleteAction";
+import { Badge } from "../ui/badge";
 
 interface Props {
   ticket: Ticket;
@@ -36,6 +37,11 @@ const TicketCard = ({
           </span>
 
           <Link href={ROUTES.TICKET(_id)}>
+            <Badge className="subtle-medium background-light800_dark300 text-light400_light500 flex flex-row gap-2 rounded-md border-none px-4 py-2 uppercase">
+              {/* <div className="flex-center space-x-2"> */}
+              <span>{po}</span>
+              {/* </div> */}
+            </Badge>
             <h3 className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-[56px] border">
               {po}
             </h3>
@@ -57,7 +63,7 @@ const TicketCard = ({
           alt={division}
           value={division}
           title={`• asked ${getTimeStamp(createdAt)}`}
-          href={ROUTES.PROFILE(author._id)}
+          href={ROUTES.HOME}
           textStyles="body-medium text-dark400_light700"
           isAuthor
           titleStyles="max-sm:hidden"

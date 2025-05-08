@@ -92,16 +92,16 @@ const TicketDetails = async ({ params, searchParams }: RouteParams) => {
       <div className="flex-start w-full flex-col">
         <div className="flex w-full flex-col-reverse justify-between">
           <div className="flex items-center justify-start gap-1">
-            <UserAvatar
+            {/* <UserAvatar
               id={author._id}
               name={author.name}
-              imageUrl={author.image}
+              imageUrl="/icons/message.svg"
               className="size-[22px]"
               fallbackClassName="text-[10px]"
-            />
-            <Link href={ROUTES.PROFILE(author._id)}>
+            /> */}
+            <Link href={ROUTES.HOME}>
               <p className="paragraph-semibold text-dark300_light700">
-                {author.name}
+                {division}
               </p>
             </Link>
           </div>
