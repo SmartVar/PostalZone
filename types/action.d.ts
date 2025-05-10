@@ -34,6 +34,11 @@ interface GetTagQuestionsParams extends Omit<PaginatedSearchParams, "filter"> {
   tagId: string;
 }
 
+interface GetTagDepartmentalbldgsParams
+  extends Omit<PaginatedSearchParams, "filter"> {
+  tagId: string;
+}
+
 interface CreateTicketParams {
   division: string;
   po: string;
@@ -43,12 +48,45 @@ interface CreateTicketParams {
   tktpriority: string;
 }
 
+interface CreateDepartmentalbldgParams {
+  division: string;
+  po: string;
+  classes: string;
+  location: string;
+  purchase_year: string;
+  soa: string;
+  paq: string;
+  area: string;
+  builtup_area: string;
+  open_space: string;
+  floors: string;
+  value: string;
+  exp_year: string;
+  expenditure: string;
+  mut_doc: string;
+  mut_state: string;
+  fund_type: string;
+  fund_amount: string;
+  cases: string;
+  case_description: string;
+  brief_history: string;
+  tags: string[];
+}
+
 interface EditTicketParams extends CreateTicketParams {
   ticketId: string;
 }
 
+interface EditDepartmentalbldgParams extends CreateDepartmentalbldgParams {
+  departmentalbldgId: string;
+}
+
 interface GetTicketParams {
   ticketId: string;
+}
+
+interface GetDepartmentalbldgParams {
+  departmentalbldgId: string;
 }
 
 interface IncrementViewsParams {
@@ -110,6 +148,10 @@ interface DeleteTicketParams {
   ticketId: string;
 }
 
+interface DeleteDepartmentalbldgParams {
+  departmentalbldgId: string;
+}
+
 interface DeleteAnswerParams {
   answerId: string;
 }
@@ -126,7 +168,7 @@ interface CreateInteractionParams {
     | "search";
   actionId: string;
   authorId: string;
-  actionTarget: "question" | "answer" | "ticket";
+  actionTarget: "question" | "answer" | "ticket" | "departmentalbldg";
 }
 
 interface UpdateReputationParams {

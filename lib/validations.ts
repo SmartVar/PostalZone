@@ -99,6 +99,39 @@ export const CreateTicketSchema = z.object({
   }),
 });
 
+export const CreateDepartmentalbldgSchema = z.object({
+  division: z.string().min(2).max(130),
+  po: z.string().min(2).max(100),
+  classes: z.string().min(1).max(100),
+  location: z.string().min(2),
+  purchase_year: z.string().min(2).max(100),
+  soa: z.string().min(2).max(100),
+  paq: z.string().min(2).max(100),
+  area: z.string().min(2).max(100),
+  builtup_area: z.string().min(2).max(100),
+  open_space: z.string().min(2).max(100),
+  floors: z.string().min(2).max(100),
+  value: z.string().min(2).max(100),
+  exp_year: z.string().min(2).max(100),
+  expenditure: z.string().min(2).max(100),
+  mut_doc: z.string().min(2).max(100),
+  mut_state: z.string().min(2).max(100),
+  fund_type: z.string().min(2).max(100),
+  fund_amount: z.string().min(2).max(100),
+  cases: z.string().min(2).max(100),
+  case_description: z.string().min(2).max(130),
+  brief_history: z.string().min(2).max(500),
+  tags: z
+    .array(
+      z
+        .string()
+        .min(1, { message: "Tag must have at least 1 character." })
+        .max(15, { message: "Tag must not exceed 15 characters." })
+    )
+    .min(1, { message: "Add at least one tag." })
+    .max(3, { message: "Maximum of 3 tags." }),
+});
+
 export const UserSchema = z.object({
   name: z.string().min(1, "Name is required"),
   username: z.string().min(3, "Username must be at least 3 characters"),
@@ -160,6 +193,14 @@ export const GetTicketSchema = z.object({
   ticketId: z.string().min(1, "Ticket ID is required"),
 });
 
+export const EditDepartmentalbldgSchema = CreateDepartmentalbldgSchema.extend({
+  departmentalbldgId: z.string().min(1, "DoP Bldg ID is required"),
+});
+
+export const GetDepartmentalbldgSchema = z.object({
+  departmentalbldgId: z.string().min(1, "DoP Bldg ID is required"),
+});
+
 export const PaginatedSearchParamsSchema = z.object({
   page: z.number().min(1, "Page must be at least 1").default(1),
   pageSize: z.number().min(1, "Page size must be at least 1").default(10),
@@ -171,6 +212,12 @@ export const PaginatedSearchParamsSchema = z.object({
 export const GetTagQuestionsSchema = PaginatedSearchParamsSchema.extend({
   tagId: z.string().min(1, "Tag ID is required"),
 });
+
+export const GetTagDepartmentalbldgsSchema = PaginatedSearchParamsSchema.extend(
+  {
+    tagId: z.string().min(1, "Tag ID is required"),
+  }
+);
 
 export const IncrementViewsSchema = z.object({
   questionId: z.string().min(1, "Question ID is required"),
@@ -252,6 +299,10 @@ export const DeleteQuestionSchema = z.object({
 
 export const DeleteTicketSchema = z.object({
   ticketId: z.string().min(1, "Ticket ID is required"),
+});
+
+export const DeleteDepartmentalbldgSchema = z.object({
+  departmentalbldgId: z.string().min(1, "Dop Bldg ID is required"),
 });
 
 export const DeleteAnswerSchema = z.object({

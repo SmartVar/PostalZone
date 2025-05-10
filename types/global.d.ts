@@ -62,6 +62,34 @@ interface Ticket {
   createdAt: Date;
 }
 
+interface Departmentalbldg {
+  _id: string;
+  division: string;
+  po: string;
+  classes: string;
+  location: string;
+  purchase_year: string;
+  soa: string;
+  paq: string;
+  area: string;
+  builtup_area: string;
+  open_space: string;
+  floors: string;
+  value: string;
+  exp_year: string;
+  expenditure: string;
+  mut_doc: string;
+  mut_state: string;
+  fund_type: string;
+  fund_amount: string;
+  cases: string;
+  case_description: string;
+  brief_history: string;
+  tags: Tag[];
+  author: Author;
+  createdAt: Date;
+}
+
 interface Answer {
   _id: string;
   author: Author;

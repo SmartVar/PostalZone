@@ -2,10 +2,12 @@ import { FilterQuery } from "mongoose";
 import action from "../handlers/action";
 import handleError from "../handlers/error";
 import {
+  GetTagDepartmentalbldgsSchema,
   GetTagQuestionsSchema,
   PaginatedSearchParamsSchema,
 } from "../validations";
 import { Question, Tag } from "@/database";
+import Departmentalbldg from "@/database/departmentalbldg.model";
 
 export const getTags = async (
   params: PaginatedSearchParams
@@ -121,6 +123,70 @@ export const getTagQuestions = async (
       data: {
         tag: JSON.parse(JSON.stringify(tag)),
         questions: JSON.parse(JSON.stringify(questions)),
+        isNext,
+      },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+};
+
+export const getTagDepartmentalbldgs = async (
+  params: GetTagDepartmentalbldgsParams
+): Promise<
+  ActionResponse<{
+    tag: Tag;
+    departmentalbldgs: Departmentalbldg[];
+    isNext: boolean;
+  }>
+> => {
+  const validationResult = await action({
+    params,
+    schema: GetTagDepartmentalbldgsSchema,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { tagId, page = 1, pageSize = 10, query } = params;
+
+  const skip = (Number(page) - 1) * pageSize;
+  const limit = Number(pageSize);
+
+  try {
+    const tag = await Tag.findById(tagId);
+    if (!tag) throw new Error("Tag not found");
+
+    const filterQuery: FilterQuery<typeof Departmentalbldg> = {
+      tags: { $in: [tagId] },
+    };
+
+    if (query) {
+      filterQuery.title = { $regex: query, $options: "i" };
+    }
+
+    const totalDepartmentalbldgs =
+      await Departmentalbldg.countDocuments(filterQuery);
+
+    const departmentalbldgs = await Departmentalbldg.find(filterQuery)
+      .select(
+        "_id division po class location purchase_year soa paq area builtup_area open-space floors value exp-year expenditures mut_doc mut_state fund_type case case_description brief_history author createdAt"
+      )
+      .populate([
+        { path: "author", select: "name image" },
+        { path: "tags", select: "name" },
+      ])
+      .skip(skip)
+      .limit(limit);
+
+    const isNext = totalDepartmentalbldgs > skip + departmentalbldgs.length;
+
+    return {
+      success: true,
+      data: {
+        tag: JSON.parse(JSON.stringify(tag)),
+        departmentalbldgs: JSON.parse(JSON.stringify(departmentalbldgs)),
         isNext,
       },
     };
