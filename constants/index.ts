@@ -82,11 +82,11 @@ export const sidebarLinks = [
     route: "/tags",
     label: "Tags",
   },
-  // {
-  //   imgURL: "/icons/user.svg",
-  //   route: "/profile",
-  //   label: "Profile",
-  // },
+  {
+    imgURL: "/icons/user.svg",
+    route: "/profile",
+    label: "Profile",
+  },
   {
     imgURL: "/icons/suitcase.svg",
     route: "/dashboard",
