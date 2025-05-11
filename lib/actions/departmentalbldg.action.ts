@@ -1,16 +1,17 @@
 "use server";
 
-import mongoose, { Collection, FilterQuery, Types } from "mongoose";
+import mongoose, { FilterQuery, Types } from "mongoose";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
 
-import { auth } from "@/auth";
+// import { auth } from "@/auth";
 // import { Answer, Collection, Interaction, Vote } from "@/database";
 // import Departmentalbldg, {IDepartmentalbldgDoc } from "@/database/departmentalbldg.model";
 import Departmentalbldg, {
   IDepartmentalbldgDoc,
 } from "@/database/departmentalbldg.model";
 // import TagQuestion from "@/database/tag-question.model";
+import TagDepartmentalbldg from "@/database/tag-departmentalbldg.model";
 import { ITagDoc } from "@/database/tag.model";
 import action from "@/lib/handlers/action";
 import handleError from "@/lib/handlers/error";
@@ -30,10 +31,11 @@ import {
 import dbConnect from "../mongoose";
 // import { createInteraction } from "./interaction.action";
 import { cache } from "react";
-import { TagQuestion } from "@/database";
+// import { TagQuestion } from "@/database";
 import { Tag, Ticket, Vote } from "lucide-react";
 import { createInteraction } from "./interaction.action";
 import { ITicketDoc } from "@/database/ticket.model";
+import { TagQuestion } from "@/database";
 
 export async function createDepartmentalbldg(
   params: CreateDepartmentalbldgParams
@@ -70,6 +72,7 @@ export async function createDepartmentalbldg(
     cases,
     case_description,
     brief_history,
+    tags,
   } = validationResult.params!;
   const userId = validationResult.session?.user?.id;
 
@@ -82,7 +85,7 @@ export async function createDepartmentalbldg(
         {
           division,
           po,
-          class: classes,
+          classes,
           location,
           // eslint-disable-next-line camelcase
           purchase_year,
@@ -99,7 +102,7 @@ export async function createDepartmentalbldg(
           mut_state,
           fund_type,
           fund_amount,
-          case: cases,
+          cases,
           case_description,
           brief_history,
           author: userId,
@@ -123,7 +126,7 @@ export async function createDepartmentalbldg(
       tagIds.push(existingTag._id);
       tagDepartmentalbldgDocuments.push({
         tag: existingTag._id,
-        question: departmentalbldg._id,
+        departmentalbldg: departmentalbldg._id,
       });
     }
 
@@ -195,6 +198,8 @@ export async function editDepartmentalbldg(
     cases,
     case_description,
     brief_history,
+    tags,
+    departmentalbldgId,
   } = validationResult.params!;
   const userId = validationResult.session?.user?.id;
 
@@ -257,6 +262,67 @@ export async function editDepartmentalbldg(
       await departmentalbldg.save({ session });
     }
 
+    // Determine tags to add and remove
+    const tagsToAdd = tags.filter(
+      (tag) =>
+        !departmentalbldg.tags.some(
+          (t: ITagDoc) => t.name.toLowerCase() === tag.toLowerCase()
+        )
+    );
+
+    const tagsToRemove = departmentalbldg.tags.filter(
+      (tag: ITagDoc) =>
+        !tags.some((t) => t.toLowerCase() === tag.name.toLowerCase())
+    );
+
+    // Add new tags
+    const newTagDocuments = [];
+    if (tagsToAdd.length > 0) {
+      for (const tag of tagsToAdd) {
+        const newTag = await Tag.findOneAndUpdate(
+          { name: { $regex: `^${tag}$`, $options: "i" } },
+          { $setOnInsert: { name: tag }, $inc: { departmentalbldgs: 1 } },
+          { upsert: true, new: true, session }
+        );
+
+        if (newTag) {
+          newTagDocuments.push({
+            tag: newTag._id,
+            departmentalbldg: departmentalbldgId,
+          });
+          departmentalbldg.tags.push(newTag._id);
+        }
+      }
+    }
+
+    // Remove tags
+    if (tagsToRemove.length > 0) {
+      const tagIdsToRemove = tagsToRemove.map((tag: ITagDoc) => tag._id);
+
+      await Tag.updateMany(
+        { _id: { $in: tagIdsToRemove } },
+        { $inc: { departmentalbldgs: -1 } },
+        { session }
+      );
+
+      await TagDepartmentalbldg.deleteMany(
+        { tag: { $in: tagIdsToRemove }, departmentalbldg: departmentalbldgId },
+        { session }
+      );
+
+      departmentalbldg.tags = departmentalbldg.tags.filter(
+        (tag: mongoose.Types.ObjectId) =>
+          !tagIdsToRemove.some((id: mongoose.Types.ObjectId) =>
+            id.equals(tag._id)
+          )
+      );
+    }
+
+    // Insert new TagQuestion documents
+    if (newTagDocuments.length > 0) {
+      await TagDepartmentalbldg.insertMany(newTagDocuments, { session });
+    }
+
     // Save the updated record
     await departmentalbldg.save({ session });
     await session.commitTransaction();
@@ -275,7 +341,7 @@ export async function editDepartmentalbldg(
 
 export const getDepartmentalbldg = cache(async function getDepartmentalbldg(
   params: GetDepartmentalbldgParams
-): Promise<ActionResponse<Ticket>> {
+): Promise<ActionResponse<Departmentalbldg>> {
   const validationResult = await action({
     params,
     schema: GetDepartmentalbldgSchema,
@@ -334,7 +400,7 @@ export async function getDepartmentalbldgs(
       filterQuery.$or = [
         { division: { $regex: query, $options: "i" } },
         { po: { $regex: query, $options: "i" } },
-        { class: { $regex: query, $options: "i" } },
+        { classes: { $regex: query, $options: "i" } },
         { location: { $regex: query, $options: "i" } },
         { purchase_year: { $regex: query, $options: "i" } },
         { soa: { $regex: query, $options: "i" } },
@@ -350,7 +416,7 @@ export async function getDepartmentalbldgs(
         { mut_state: { $regex: query, $options: "i" } },
         { fund_type: { $regex: query, $options: "i" } },
         { fund_amount: { $regex: query, $options: "i" } },
-        { case: { $regex: query, $options: "i" } },
+        { cases: { $regex: query, $options: "i" } },
         { case_description: { $regex: query, $options: "i" } },
         { brief_description: { $regex: query, $options: "i" } },
       ];
@@ -427,9 +493,9 @@ export async function deleteDepartmentalbldg(
 
     // Delete related entries inside the transaction
     // await Collection.deleteMany({ ticket: ticketId }).session(session);
-    await TagQuestion.deleteMany({ ticket: departmentalbldgId }).session(
-      session
-    );
+    await TagDepartmentalbldg.deleteMany({
+      ticket: departmentalbldgId,
+    }).session(session);
 
     // For all tags of Question, find them and reduce their count
     if (departmentalbldg.tags.length > 0) {
@@ -465,14 +531,14 @@ export async function deleteDepartmentalbldg(
     );
 
     // log the interaction
-    after(async () => {
-      await createInteraction({
-        action: "delete",
-        actionId: departmentalbldgId,
-        actionTarget: "departmentalbldg",
-        authorId: user?.id as string,
-      });
-    });
+    // after(async () => {
+    //   await createInteraction({
+    //     action: "delete",
+    //     actionId: departmentalbldgId,
+    //     actionTarget: "departmentalbldg",
+    //     authorId: user?.id as string,
+    //   });
+    // });
 
     await session.commitTransaction();
     session.endSession();

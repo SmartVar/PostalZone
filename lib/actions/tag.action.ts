@@ -171,7 +171,7 @@ export const getTagDepartmentalbldgs = async (
 
     const departmentalbldgs = await Departmentalbldg.find(filterQuery)
       .select(
-        "_id division po class location purchase_year soa paq area builtup_area open-space floors value exp-year expenditures mut_doc mut_state fund_type case case_description brief_history author createdAt"
+        "_id division po classes location purchase_year soa paq area builtup_area open-space floors value exp-year expenditures mut_doc mut_state fund_type cases case_description brief_history author createdAt"
       )
       .populate([
         { path: "author", select: "name image" },

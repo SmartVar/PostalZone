@@ -59,6 +59,7 @@ const DepartmentalbldgSchema = new Schema<IDepartmentalbldg>(
 );
 
 const Departmentalbldg =
-  models?.Departmentalbldg || model("Departmentalbldg", DepartmentalbldgSchema);
+  models?.Departmentalbldg ||
+  model<IDepartmentalbldg>("Departmentalbldg", DepartmentalbldgSchema);
 
 export default Departmentalbldg;
